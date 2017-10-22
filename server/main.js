@@ -1,7 +1,6 @@
 import { Meteor } from 'meteor/meteor';
-import '../imports/api/tables.js';
+import { Tables } from '../imports/api/tables.js';
 
 Meteor.startup(() => {
-  // code to run on server at startup
 });
 

@@ -16,7 +16,7 @@ class App extends Component {
     const player1 = ReactDOM.findDOMNode(this.refs.player1Input).value.trim();
     const player2 = ReactDOM.findDOMNode(this.refs.player2Input).value.trim();
 
-    Tables.insert({
+    const table_id = Tables.insert({
       game,
       players: [player1, player2],
       createdAt: new Date(),
@@ -26,6 +26,8 @@ class App extends Component {
     ReactDOM.findDOMNode(this.refs.gameInput).value = '';
     ReactDOM.findDOMNode(this.refs.player1Input).value = '';
     ReactDOM.findDOMNode(this.refs.player2Input).value = '';
+
+    Meteor.call('initializeTable', table_id)
   }
 
   getGames() {
@@ -44,7 +46,7 @@ class App extends Component {
 
   renderTables() {
     var retval = this.props.tables.map((table) => (
-      <Table key={table._id} _id={table._id} game={table.game} players={table.players} />
+      <Table key={table._id} _id={table._id} game={table.game} players={table.players} remote_game_id={table.remote_game_id} />
     ));
     return retval
   }

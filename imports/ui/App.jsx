@@ -9,18 +9,23 @@ import Table from './Table.jsx';
 
 class App extends Component {
 
-  handleSubmit(event) {
+  handleSubmit = (event) => {
     event.preventDefault();
 
-    const text = ReactDOM.findDOMNode(this.refs.textInput).value.trim();
+    const game = ReactDOM.findDOMNode(this.refs.gameInput).value.trim();
+    const player1 = ReactDOM.findDOMNode(this.refs.player1Input).value.trim();
+    const player2 = ReactDOM.findDOMNode(this.refs.player2Input).value.trim();
 
     Tables.insert({
-      text,
-      createdAt: new Date(), // current time
+      game,
+      players: [player1, player2],
+      createdAt: new Date(),
     });
 
     // Clear form
-    ReactDOM.findDOMNode(this.refs.textInput).value = '';
+    ReactDOM.findDOMNode(this.refs.gameInput).value = '';
+    ReactDOM.findDOMNode(this.refs.player1Input).value = '';
+    ReactDOM.findDOMNode(this.refs.player2Input).value = '';
   }
 
   getGames() {
@@ -39,7 +44,7 @@ class App extends Component {
 
   renderTables() {
     var retval = this.props.tables.map((table) => (
-      <Table key={table._id} table={table} />
+      <Table key={table._id} _id={table._id} game={table.game} players={table.players} />
     ));
     return retval
   }
@@ -52,19 +57,39 @@ class App extends Component {
         </header>
 
         <LoginButtons />
+        Games:
         <ul>
           {this.renderGames()}
         </ul>
         <hr/>
+        Tables:
         <ul>
           {this.renderTables()}
         </ul>
-        <form className="new-table" onSubmit={this.handleSubmit.bind(this)} >
+        <form className="new-table" onSubmit={this.handleSubmit} >
+          <select
+            type="select"
+            ref="gameInput">
+            <option value="guerrilla-checkers">Guerrilla Checkers</option>
+            <option value="infochess">InfoChess</option>
+            <option value="asymmetric-warfare">Asymmetric Warfare</option>
+          </select>
+          <br/>
+          Player1:
           <input
             type="text"
-            ref="textInput"
-            placeholder="go fuck yourself :D"
+            ref="player1Input"
+            defaultValue="gavorkian"
           />
+          <br/>
+          Player2:
+          <input
+            type="text"
+            ref="player2Input"
+            defaultValue="kefka"
+          />
+          <br/>
+          <button type="submit">Create Game</button>
         </form>
       </div>
     );
